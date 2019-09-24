@@ -18,6 +18,8 @@ namespace CSharpReduxDemo.Controllers
 
         private readonly ILogger<WeatherForecastController> _logger;
 
+        private static readonly NLog.Logger log = NLog.LogManager.GetCurrentClassLogger();
+
         public WeatherForecastController(ILogger<WeatherForecastController> logger)
         {
             _logger = logger;
@@ -26,8 +28,9 @@ namespace CSharpReduxDemo.Controllers
         [HttpGet]
         public IEnumerable<WeatherForecast> Get()
         {
-            var msg = $"{DateTime.Now.ToString()},request ip:{Request.Host},{Request.HttpContext.Request.Host}"; 
+            var msg = $"{DateTime.Now.ToString()},request remote ip:{Request.HttpContext.Connection.RemoteIpAddress},{Request.HttpContext.Connection.RemotePort}";
             _logger.LogDebug(msg);
+            log.Info(msg);
             var rng = new Random();
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
